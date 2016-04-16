@@ -13,7 +13,7 @@ public class Shoot : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
     tran = gameObject.GetComponent<Transform>();
-    aus = gameObject.GetComponentInParent<AudioSource>();
+    aus = gameObject.GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
