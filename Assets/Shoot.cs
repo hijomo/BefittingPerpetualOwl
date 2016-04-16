@@ -8,11 +8,12 @@ public class Shoot : MonoBehaviour {
   Vector3 forward;
   public Transform bulletSpawn;
   public float bulletForce;
+  AudioSource aus;
 
 	// Use this for initialization
 	void Start () {
     tran = gameObject.GetComponent<Transform>();
-   
+    aus = gameObject.GetComponentInParent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -24,7 +25,8 @@ public class Shoot : MonoBehaviour {
 	}
   void Shot()
   {
-    forward = transform.TransformDirection(tran.up);
+    aus.Play();
+    forward = transform.TransformDirection(Vector3.up);
     GameObject obj = (GameObject)Instantiate(bullet,bulletSpawn.position,Quaternion.identity);
     Rigidbody rig = obj.GetComponent<Rigidbody>();
     rig.AddForce(forward * bulletForce);
