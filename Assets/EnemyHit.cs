@@ -10,7 +10,8 @@ public class EnemyHit : MonoBehaviour {
   public GameObject twoSideMesh;
   public GameObject currentForm;
   public Material ememyMat;
-
+  float nextHit; // timer so you can ony hit the object every .5s
+  public float hitCoolDown = 0.5f;
   public AudioSource aus;
   void OnTriggerEnter(Collider other)
   {
@@ -22,10 +23,13 @@ public class EnemyHit : MonoBehaviour {
   }
   void ChangeForm()
   {
+    if (Time.time < nextHit) return;
+    nextHit = Time.time + hitCoolDown;
     aus.Play();
     if (isLine)
     {
       Destroy(gameObject, 0.75f);
+      return;
     }
     if (isTri)
     {
@@ -36,6 +40,7 @@ public class EnemyHit : MonoBehaviour {
       obj.GetComponent<MeshRenderer>().material = ememyMat;
       currentForm = obj;
       isLine = true;
+      return;
     }
     if (isQuad)
     {
@@ -46,14 +51,16 @@ public class EnemyHit : MonoBehaviour {
       obj.GetComponent<MeshRenderer>().material = ememyMat;
       currentForm = obj;
       isTri = true;
+      return;
     }
-    aus.Play();
+  
 
    
   }
   // Use this for initialization
   void Start () {
     aus = gameObject.GetComponent<AudioSource>();
+    nextHit = Time.time + hitCoolDown;
 	}
 	
 	// Update is called once per frame
