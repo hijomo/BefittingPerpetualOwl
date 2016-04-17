@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class EnemyHit : MonoBehaviour {
+
+  GameController gameController;
   public bool isQuad = true;
   public bool isTri;
   public bool isLine;
@@ -24,6 +27,7 @@ public class EnemyHit : MonoBehaviour {
   void ChangeForm()
   {
     if (Time.time < nextHit) return;
+    gameController.AddScore(17);
     nextHit = Time.time + hitCoolDown;
     aus.Play();
     if (isLine)
@@ -61,6 +65,7 @@ public class EnemyHit : MonoBehaviour {
   void Start () {
     aus = gameObject.GetComponent<AudioSource>();
     nextHit = Time.time + hitCoolDown;
+    gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
 	}
 	
 	// Update is called once per frame

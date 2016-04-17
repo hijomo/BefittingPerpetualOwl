@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
+  PlayerHit playerHit;
+  public Text scoreText;
   public GameObject player;
   public GameObject enemy;
   float nextSpawnTime;
@@ -10,18 +13,30 @@ public class GameController : MonoBehaviour {
   public float maxX, maxY, minX, minY;
   public float spawnProgression = 20;
   float nextWaveTime;
-  int waveNumber=1;
+  int waveNumber = 1;
+  int score = 0;
+  int nextLevelup= 500;
+  public int levelUpCoolDown = 500;
+ 
 
 
 	// Use this for initialization
 	void Start () {
     nextSpawnTime = Time.time;
     nextWaveTime = Time.time + spawnProgression;
-    Instantiate(player, Vector3.zero, Quaternion.identity);
+    GameObject obj =(GameObject)Instantiate(player, Vector3.zero, Quaternion.identity);
+    playerHit = obj.GetComponent<PlayerHit>();
+    
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+    if (Input.GetKeyDown(KeyCode.T)|| score > nextLevelup)
+    {
+      nextLevelup = score + levelUpCoolDown;
+      playerHit.FormUp();
+    }
     if (Time.time > nextWaveTime)
     {
       waveNumber++;
@@ -36,6 +51,7 @@ public class GameController : MonoBehaviour {
       nextSpawnTime = Time.time + spawnCoolDown;
       SpawnWave(waveNumber);
     }
+    UpdateUI();
 	}
 
   void SpawnWave(int numberToSpawn)
@@ -48,5 +64,13 @@ public class GameController : MonoBehaviour {
      GameObject obj = (GameObject)Instantiate(enemy, pos, rot);
       obj.GetComponent<Rigidbody>().AddForce(-pos * 10);
     }
+  }
+  public void AddScore(int points)
+  {
+    score += points;
+  }
+  void UpdateUI()
+  {
+    scoreText.text = score.ToString();
   }
 }
