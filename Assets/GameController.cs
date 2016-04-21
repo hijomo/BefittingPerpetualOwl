@@ -17,22 +17,38 @@ public class GameController : MonoBehaviour {
   int score = 0;
   int nextLevelup= 500;
   public int levelUpCoolDown = 500;
+
+  public Text centreText;
+  bool startState;
+  bool gameOverState;
+  float resetTime;
+  public float spawnForce = 9f;
  
 
 
 	// Use this for initialization
-	void Start () {
-    nextSpawnTime = Time.time;
-    nextWaveTime = Time.time + spawnProgression;
-    GameObject obj =(GameObject)Instantiate(player, Vector3.zero, Quaternion.identity);
-    playerHit = obj.GetComponent<PlayerHit>();
-    
-	}
+	void Start ()
+  {
+    startState = true;
+    centreText.gameObject.SetActive(true);
+    centreText.text = ("Press any key to start");
+  }
 	
 	// Update is called once per frame
-	void Update () {
-
-    if (Input.GetKeyDown(KeyCode.T)|| score > nextLevelup)
+	void Update ()
+  {
+    
+    if (Input.anyKeyDown && startState)
+    {
+      startState = false;
+      centreText.gameObject.SetActive(false);
+      nextSpawnTime = Time.time;
+      nextWaveTime = Time.time + spawnProgression;
+      GameObject obj = (GameObject)Instantiate(player, Vector3.zero, Quaternion.identity);
+      playerHit = obj.GetComponent<PlayerHit>();
+    }
+    if (startState) return;
+    if (score > nextLevelup)
     {
       nextLevelup = score + levelUpCoolDown;
       playerHit.FormUp();
@@ -51,6 +67,10 @@ public class GameController : MonoBehaviour {
       nextSpawnTime = Time.time + spawnCoolDown;
       SpawnWave(waveNumber);
     }
+    if (gameOverState && Time.time > resetTime)
+    {
+      SceneManager.LoadScene(0);
+    }
     UpdateUI();
 	}
 
@@ -58,19 +78,30 @@ public class GameController : MonoBehaviour {
   {
     for (int i = numberToSpawn; i >= 0; i--)
     {
-      Vector3 temp = Random.onUnitSphere;
+      spawnForce += 0.5f;
+      Vector3 temp = Random.onUnitSphere; 
       Vector3 pos = new Vector3(temp.x, temp.y, 0f).normalized*10;
       Quaternion rot = Quaternion.identity;
-     GameObject obj = (GameObject)Instantiate(enemy, pos, rot);
-      obj.GetComponent<Rigidbody>().AddForce(-pos * 10);
+      GameObject obj = (GameObject)Instantiate(enemy, pos, rot);
+      obj.GetComponent<Rigidbody>().AddForce(-pos * spawnForce);
     }
   }
+
   public void AddScore(int points)
   {
     score += points;
   }
+
   void UpdateUI()
   {
     scoreText.text = score.ToString();
+  }
+
+  public void GameOver()
+  {
+    gameOverState = true;
+    resetTime = Time.time + 5f;
+    centreText.gameObject.SetActive(true);
+    centreText.text = ("Game Over\r\nRestart soon");
   }
 }

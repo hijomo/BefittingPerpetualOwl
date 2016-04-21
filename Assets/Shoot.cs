@@ -9,17 +9,21 @@ public class Shoot : MonoBehaviour {
   public Transform bulletSpawn;
   public float bulletForce;
   AudioSource aus;
+  float nextShot;
+  float shotCoolDown = (60f/140f); 
 
 	// Use this for initialization
 	void Start () {
     tran = gameObject.GetComponent<Transform>();
     aus = gameObject.GetComponent<AudioSource>();
+    nextShot = Time.time + shotCoolDown;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	if (Input.GetKeyDown(KeyCode.Space))
+	if (Time.time > nextShot)
     {
+      nextShot = Time.time + shotCoolDown;
       Shot();
     }
 	}

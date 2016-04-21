@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PlayerHit : MonoBehaviour {
+  GameController gameController;
   public bool isQuad ;
   public bool isTri = true;
   public bool isLine;
@@ -17,6 +18,7 @@ public class PlayerHit : MonoBehaviour {
   public GameObject hP2;
   public GameObject hP3;
   public GameObject hP4;
+
   void OnTriggerEnter(Collider other)
   {
     if (other.tag=="Bullet" || other.tag =="Enemy")
@@ -31,11 +33,12 @@ public class PlayerHit : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+    gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     aus = gameObject.GetComponent<AudioSource>();
 	}
   public void FormUp()
   {
-
+    Quaternion currentRotation = gameObject.GetComponent<Transform>().rotation;
     if (isLine)
     {
       isLine = false;
@@ -56,6 +59,7 @@ public class PlayerHit : MonoBehaviour {
       hP3.GetComponent<Transform>().rotation = hardpointrotation3;
       hP4.SetActive(false);
       isTri = true;
+      gameObject.GetComponent<Transform>().rotation = currentRotation;
       return;
     }
     if (isTri)
@@ -80,6 +84,7 @@ public class PlayerHit : MonoBehaviour {
       hP4.SetActive(true);
       hP4.GetComponent<Transform>().rotation = hardpointrotation4;
       isQuad = true;
+      gameObject.GetComponent<Transform>().rotation = currentRotation;
       return;
     }
     if (isQuad)
@@ -89,12 +94,14 @@ public class PlayerHit : MonoBehaviour {
   }
   void FormDown()
   {
+    Quaternion currentRotation = gameObject.GetComponent<Transform>().rotation;
     if (Time.time < nextHit) return;
   
     nextHit = Time.time + hitCoolDown;
     aus.Play();
     if (isLine)
     {
+      gameController.GameOver();
       Destroy(gameObject, 1.5f);
       return;
     }
@@ -116,6 +123,7 @@ public class PlayerHit : MonoBehaviour {
       hP3.SetActive(false);
       hP4.SetActive(false);
       isLine = true;
+      gameObject.GetComponent<Transform>().rotation = currentRotation;
       return;
     }
     if (isQuad)
@@ -138,14 +146,12 @@ public class PlayerHit : MonoBehaviour {
       hP3.GetComponent<Transform>().rotation = hardpointrotation3;
       hP4.SetActive(false);
       isTri = true;
+      gameObject.GetComponent<Transform>().rotation = currentRotation;
       return;
     }
   }
 	// Update is called once per frame
 	void Update () {
-	 if (Input.GetKeyDown(KeyCode.T))
-    {
-      //form up
-    }
+
 	}
 }

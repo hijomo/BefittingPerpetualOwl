@@ -19,22 +19,22 @@ public class WallWarp : MonoBehaviour {
     }
    if (isTop)
     {
-      pos.y = -4f;
+      pos.y = -5f;
       tran.position = pos;
     }
     if (isBottom)
     {
-      pos.y = 4f;
+      pos.y = 5f;
       tran.position = pos;
     }
     if (isLeft)
     {
-      pos.x = 7f;
+      pos.x = 8f;
       tran.position = pos;
     }
     if (isRight)
     {
-      pos.x = -7f;
+      pos.x = -8f;
       tran.position = pos;
     }
   }

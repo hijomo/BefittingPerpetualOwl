@@ -16,6 +16,7 @@ public class EnemyHit : MonoBehaviour {
   float nextHit; // timer so you can ony hit the object every .5s
   public float hitCoolDown = 0.5f;
   public AudioSource aus;
+
   void OnTriggerEnter(Collider other)
   {
     if (other.tag == "PlayerBullet")
@@ -24,6 +25,7 @@ public class EnemyHit : MonoBehaviour {
       ChangeForm();
     }
   }
+
   void ChangeForm()
   {
     if (Time.time < nextHit) return;
