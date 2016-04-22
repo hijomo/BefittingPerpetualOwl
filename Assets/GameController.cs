@@ -51,7 +51,10 @@ public class GameController : MonoBehaviour {
     if (score > nextLevelup)
     {
       nextLevelup = score + levelUpCoolDown;
-      playerHit.FormUp();
+      if (playerHit != null)
+      {
+        playerHit.FormUp();
+      }
     }
     if (Time.time > nextWaveTime)
     {
@@ -73,7 +76,7 @@ public class GameController : MonoBehaviour {
     }
     UpdateUI();
 	}
-
+  
   void SpawnWave(int numberToSpawn)
   {
     for (int i = numberToSpawn; i >= 0; i--)
@@ -100,7 +103,7 @@ public class GameController : MonoBehaviour {
   public void GameOver()
   {
     gameOverState = true;
-    resetTime = Time.time + 5f;
+    resetTime = Time.time + 4f;
     centreText.gameObject.SetActive(true);
     centreText.text = ("Game Over\r\nRestart soon");
   }

@@ -12,6 +12,9 @@ public class EnemyHit : MonoBehaviour {
   public GameObject fourSideMesh;
   public GameObject twoSideMesh;
   public GameObject currentForm;
+  public AudioClip triHitSound;
+  public AudioClip biHitSound;
+  public AudioClip quadHitSound;
   public Material ememyMat;
   float nextHit; // timer so you can ony hit the object every .5s
   public float hitCoolDown = 0.5f;
@@ -31,14 +34,18 @@ public class EnemyHit : MonoBehaviour {
     if (Time.time < nextHit) return;
     gameController.AddScore(17);
     nextHit = Time.time + hitCoolDown;
-    aus.Play();
+    
     if (isLine)
     {
+      aus.clip = biHitSound;
+      aus.Play();
       Destroy(gameObject, 0.75f);
       return;
     }
     if (isTri)
     {
+      aus.clip = triHitSound;
+      aus.Play();
       isTri = false;
       Destroy(currentForm);
       GameObject obj = (GameObject)Instantiate(twoSideMesh, Vector3.zero, Quaternion.identity);
@@ -50,6 +57,8 @@ public class EnemyHit : MonoBehaviour {
     }
     if (isQuad)
     {
+      aus.clip = quadHitSound;
+      aus.Play();
       isQuad = false;
       Destroy(currentForm);
       GameObject obj = (GameObject)Instantiate(threeSideMesh, Vector3.zero, Quaternion.identity);
